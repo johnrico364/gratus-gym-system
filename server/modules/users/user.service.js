@@ -31,6 +31,17 @@ export const UserService = {
   },
   // Login User =================================================================================================================================
   async loginUser(data){
-    
+    // Validations
+    const user = await User.findOne({email: data.email})
+    if(!user){
+      throw Error("Email not found");
+    }
+
+    const isMatch = await bcrypt.compare(data.password, user.password);
+    if(!isMatch){
+      throw Error("Invalid password");
+    }
+
+    return user
   }
 };
